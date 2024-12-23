@@ -23,6 +23,8 @@ jobs:
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.7.0
 
       - name: PNPM install
         run: pnpm install
