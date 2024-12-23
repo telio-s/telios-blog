@@ -30,7 +30,7 @@ jobs:
         run: pnpm install
 
       - name: Build app
-        run: pnpm run build --prod
+        run: pnpm run build
 
       - name: Deploy vercel
         uses: amondnet/vercel-action@v25 #deploy
