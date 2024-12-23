@@ -39,4 +39,5 @@ jobs:
           vercel-args: "--prod" #Optional
           vercel-org-id: ${{ secrets.ORG_ID}} #Required
           vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
+          alias-domains: www.telio-s.com
           working-directory: ./
