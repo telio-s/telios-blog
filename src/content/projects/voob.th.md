@@ -3,7 +3,7 @@ locale: "th"
 translationKey: "voob"
 title: "Voob"
 description: "พื้นที่ส่วนตัวสำหรับเก็บคำ ประโยค สำนวน quote และสิ่งที่น่าสนใจจากการอ่าน ดู หรือสำรวจสิ่งต่าง ๆ บนอินเทอร์เน็ต"
-status: "โปรเจกต์ผลิตภัณฑ์"
+status: "Product Project"
 tags:
   - Product
   - SaaS

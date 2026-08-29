@@ -90,7 +90,7 @@ export const translations = {
     },
     projectsIndex: {
       eyebrow: "Projects",
-      title: "Things I build, framed by the problem they are meant to solve.",
+      title: "Things I build, framed by the problems they’re meant to solve.",
       description:
         "These are not presented as technology checklists. Each case study focuses on purpose, users, trade-offs, and what the project taught me.",
     },
@@ -151,7 +151,7 @@ export const translations = {
     },
     project: {
       back: "กลับไปหน้าโปรเจกต์",
-      readCaseStudy: "อ่านเคสโปรเจกต์",
+      readCaseStudy: "อ่านเบื้องหลังโปรเจกต์",
     },
     home: {
       hero: {
@@ -213,9 +213,9 @@ export const translations = {
     },
     projectsIndex: {
       eyebrow: "โปรเจกต์",
-      title: "สิ่งที่เราสร้าง โดยเล่าผ่านปัญหาที่มันควรช่วยแก้",
+      title: "สิ่งที่เราสร้าง และปัญหาที่แต่ละโปรเจกต์ตั้งใจจะแก้",
       description:
-        "งานเหล่านี้ไม่ได้ถูกนำเสนอเป็นรายการเทคโนโลยี แต่แต่ละเคสจะโฟกัสที่เป้าหมาย ผู้ใช้ trade-off และสิ่งที่โปรเจกต์สอนเรา",
+        "เล่าปัญหาผ่านโปรเจกต์ และ trade-offs ที่ต้องตัดสินใจ รวมถึงสิ่งที่ได้เรียนรู้จากการทำโปรเจกต์นั้น",
     },
     consulting: {
       hero: {
