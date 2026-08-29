@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { LocalizedEntry } from "@/lib/localized-content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  localizedProject?: LocalizedEntry<"projects">;
+}
+
+const { project, localizedProject } = Astro.props;
+const projects = localizedProject ?? { en: project, th: project };
+---
+
+<article class="notion-block group min-h-72 p-6 md:p-8">
+  <div>
+    <p class="micro-label">
+      <span data-locale="en">{projects.en.data.status}</span>
+      <span data-locale="th" hidden>{projects.th.data.status}</span>
+    </p>
+  </div>
+  <div class="mt-4 flex flex-wrap gap-2">
+      {project.data.tags.map((tag) => (
+        <span class="rounded-sm border border-border/80 bg-[hsl(var(--surface-muted)/0.6)] px-2 py-1 text-xs font-medium text-muted-foreground">
+          {tag}
+        </span>
+      ))}
+    </div>
+  <a href={`/projects/${project.id}`} class="mt-4 block max-w-4xl">
+    <h3 class="text-4xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
+      <span data-locale="en">{projects.en.data.title}</span>
+      <span data-locale="th" hidden>{projects.th.data.title}</span>
+    </h3>
+    <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">
+      <span data-locale="en">{projects.en.data.description}</span>
+      <span data-locale="th" hidden>{projects.th.data.description}</span>
+    </p>
+    <p class="mt-8 text-sm font-semibold text-primary" data-i18n="project.readCaseStudy">Read case study</p>
+
+    
+  </a>
+</article>

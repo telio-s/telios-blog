@@ -1,0 +1,74 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BottomNav from "@/components/BottomNav.astro";
+import Footer from "@/components/Footer.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+
+const projects = getLocalizedEntryPairs(await getCollection("projects")).filter(isPublicLocalizedEntry);
+---
+
+<BaseLayout title="Projects" description="Product and software projects explained through problem, business thinking, user experience, and delivery decisions.">
+  <BottomNav />
+  <main class="site-container py-12 sm:py-16">
+    <header class="grid gap-8 border-y border-border/80 py-10 md:grid-cols-12">
+      <div class="md:col-span-3">
+        <p class="micro-label" data-i18n="projectsIndex.eyebrow">Projects</p>
+      </div>
+      <div class="md:col-span-8">
+        <h1 class="text-5xl font-semibold leading-tight text-foreground sm:text-7xl" data-i18n="projectsIndex.title">Things I build, framed by the problem they are meant to solve.</h1>
+        <p class="mt-6 max-w-3xl text-xl leading-8 text-muted-foreground" data-i18n="projectsIndex.description">
+          These are not presented as technology checklists. Each case study focuses on purpose, users, trade-offs, and what the project taught me.
+        </p>
+      </div>
+    </header>
+
+    <section class="mt-10 grid gap-5">
+      {projects.map((project) => <ProjectCard project={project.en} localizedProject={project} />)}
+    </section>
+  </main>
+  <Footer />
+  <style>
+    :global(html[lang="th"]) h1[data-i18n="projectsIndex.title"] {
+      line-height: 1.48;
+    }
+  </style>
+  <script is:inline>
+    const projectsIndexTranslations = {
+      en: {
+        "projectsIndex.eyebrow": "Projects",
+        "projectsIndex.title": "Things I build, framed by the problem they are meant to solve.",
+        "projectsIndex.description": "These are not presented as technology checklists. Each case study focuses on purpose, users, trade-offs, and what the project taught me.",
+      },
+      th: {
+        "projectsIndex.eyebrow": "โปรเจกต์",
+        "projectsIndex.title": "สิ่งที่เราสร้าง โดยเล่าผ่านปัญหาที่มันควรช่วยแก้",
+        "projectsIndex.description": "งานเหล่านี้ไม่ได้ถูกนำเสนอเป็นรายการเทคโนโลยี แต่แต่ละเคสจะโฟกัสที่เป้าหมาย ผู้ใช้ trade-off และสิ่งที่โปรเจกต์สอนเรา",
+      },
+    };
+
+    const getProjectsIndexLanguage = () => {
+      const params = new URLSearchParams(window.location.search);
+      const urlLanguage = params.get("lang");
+      if (urlLanguage === "th" || urlLanguage === "en") return urlLanguage;
+
+      const storedLanguage = window.localStorage.getItem("language");
+      if (storedLanguage === "th" || storedLanguage === "en") return storedLanguage;
+
+      return "en";
+    };
+
+    const setProjectsIndexLanguage = (language) => {
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.getAttribute("data-i18n");
+        if (key && projectsIndexTranslations[language][key]) {
+          element.textContent = projectsIndexTranslations[language][key];
+        }
+      });
+    };
+
+    setProjectsIndexLanguage(getProjectsIndexLanguage());
+    window.addEventListener("languagechange", (event) => setProjectsIndexLanguage(event.detail.language));
+  </script>
+</BaseLayout>

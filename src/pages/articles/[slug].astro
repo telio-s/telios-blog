@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+
+export async function getStaticPaths() {
+  const articles = getLocalizedEntryPairs(await getCollection("articles")).filter(isPublicLocalizedEntry);
+  return articles.map((article) => ({
+    params: { slug: article.en.id },
+    props: { article: article.en, localizedArticle: article },
+  }));
+}
+
+const { article, localizedArticle } = Astro.props;
+---
+
+<ArticleLayout article={article} localizedArticle={localizedArticle} />

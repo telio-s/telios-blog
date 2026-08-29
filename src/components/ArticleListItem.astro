@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Badge from "./Badge.astro";
+import type { LocalizedEntry } from "@/lib/localized-content";
+
+interface Props {
+  article: CollectionEntry<"articles">;
+  localizedArticle?: LocalizedEntry<"articles">;
+  featured?: boolean;
+}
+
+const { article, localizedArticle, featured = false } = Astro.props;
+const articles = localizedArticle ?? { en: article, th: article };
+const date = articles.en.data.publishedAt.toLocaleDateString("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+const thaiDate = articles.th.data.publishedAt.toLocaleDateString("th-TH", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+---
+
+<article class:list={["group border-b border-dashed border-border/80 py-7", featured && "md:grid md:grid-cols-12 md:gap-8 md:py-10"]}>
+  <div class:list={[featured ? "md:col-span-3" : ""]}>
+    <div class="flex flex-wrap items-center gap-3 text-xs font-medium text-muted-foreground">
+      <Badge label={article.data.category} />
+      <span data-locale="en">{articles.en.data.readingTime ?? "5 min read"}</span>
+      <span data-locale="th" hidden>{articles.th.data.readingTime ?? "อ่าน 5 นาที"}</span>
+      <time datetime={article.data.publishedAt.toISOString()} data-locale="en">{date}</time>
+      <time datetime={article.data.publishedAt.toISOString()} data-locale="th" hidden>{thaiDate}</time>
+    </div>
+  </div>
+  <a href={`/articles/${article.id}`} class:list={["mt-4 block", featured && "md:col-span-8 md:mt-0"]}>
+    <h3 class:list={[
+      "max-w-4xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary",
+      featured ? "text-3xl sm:text-5xl" : "text-2xl",
+    ]}>
+      <span data-locale="en">{articles.en.data.title}</span>
+      <span data-locale="th" hidden>{articles.th.data.title}</span>
+    </h3>
+    <p class="mt-4 max-w-2xl text-base leading-7 text-muted-foreground">
+      <span data-locale="en">{articles.en.data.description}</span>
+      <span data-locale="th" hidden>{articles.th.data.description}</span>
+    </p>
+  </a>
+</article>

@@ -1,0 +1,236 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BottomNav from "@/components/BottomNav.astro";
+import Footer from "@/components/Footer.astro";
+import ButtonLink from "@/components/ButtonLink.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ArticleListItem from "@/components/ArticleListItem.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+
+const articles = getLocalizedEntryPairs(await getCollection("articles"))
+  .filter(isPublicLocalizedEntry)
+  .sort((a, b) => b.en.data.publishedAt.valueOf() - a.en.data.publishedAt.valueOf());
+const featuredArticles = articles.filter((article) => article.en.data.featured).slice(0, 4);
+const projects = getLocalizedEntryPairs(await getCollection("projects"))
+  .filter(isPublicLocalizedEntry)
+  .filter((project) => project.en.data.featured);
+
+const helpAreas = [
+  {
+    title: "Turn Ideas Into Requirements",
+    titleKey: "help.ideas.title",
+    body: "Transform business ideas, pain points, and workflows into structured requirements a software team can discuss and estimate.",
+    bodyKey: "help.ideas.body",
+  },
+  {
+    title: "Define Scope Before Development",
+    titleKey: "help.scope.title",
+    body: "Clarify what should be built now, what can wait, and where the boundaries of the first version should be.",
+    bodyKey: "help.scope.body",
+  },
+  {
+    title: "Bridge Business and Developers",
+    titleKey: "help.bridge.title",
+    body: "Help business owners communicate with developers, freelancers, and software houses without needing to become technical themselves.",
+    bodyKey: "help.bridge.body",
+  },
+  {
+    title: "Review What Gets Delivered",
+    titleKey: "help.review.title",
+    body: "Check whether the delivered software matches agreed requirements, business rules, and important workflows.",
+    bodyKey: "help.review.body",
+  },
+];
+---
+
+<BaseLayout
+  title="Telio the Builder"
+  description="I help business owners turn unclear ideas into structured software requirements, scope, and delivery conversations."
+>
+  <BottomNav />
+
+  <main>
+    <section class="hairline-y grid-frame">
+      <div class="site-container grid gap-10 py-16 sm:py-24 lg:grid-cols-12">
+        <div class="lg:col-span-8">
+          <p class="micro-label" data-i18n="hero.eyebrow">Telio the Builder</p>
+          <h1 class="mt-7 max-w-5xl text-5xl font-semibold leading-[1.02] text-foreground sm:text-7xl lg:text-8xl" data-i18n-html="hero.title">
+            I help business owners turn ideas into software requirements developers can actually build.
+          </h1>
+        </div>
+        <div class="self-end rounded-[16px] border border-border/80 bg-card/95 p-6 shadow-xl shadow-foreground/10 lg:col-span-4">
+          <p class="text-lg leading-8 text-muted-foreground" data-i18n-html="hero.body">
+            <strong>I’m Tong, a Software Engineer with experience working directly with business teams across multiple projects</strong>, from understanding requirements and designing technical solutions and system architecture to building real software systems.
+
+            <br /><br />
+
+            I’m especially interested in the space between <strong>Business and Technology</strong>, turning business problems and ideas into software that is clear, practical to build, and designed to grow.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <ButtonLink href="/articles"><span data-i18n="hero.cta.articles">Read my articles</span></ButtonLink>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-container py-16 sm:py-20">
+      <SectionHeading
+        eyebrow="What I help with"
+        eyebrowKey="help.eyebrow"
+        title="Less ambiguity before code, fewer surprises after delivery."
+        titleKey="help.title"
+        description="Most software problems start as communication problems. The work is to make business intent specific enough for technical delivery."
+        descriptionKey="help.description"
+      />
+      <div class="grid border-l border-t border-border/80 md:grid-cols-2">
+        {helpAreas.map((item, index) => (
+          <article class="min-h-64 border-b border-r border-border/80 bg-card/35 p-6 sm:p-8">
+            <p class="text-sm font-semibold text-primary/70">0{index + 1}</p>
+            <h3 class="mt-8 text-2xl font-semibold text-foreground" data-i18n={item.titleKey}>{item.title}</h3>
+            <p class="mt-4 max-w-xl text-base leading-7 text-muted-foreground" data-i18n={item.bodyKey}>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="hairline-y bg-[hsl(var(--surface-muted)/0.38)]">
+      <div class="site-container grid gap-10 py-16 sm:py-20 lg:grid-cols-12">
+        <div class="lg:col-span-4">
+          <p class="micro-label" data-i18n="perspective.eyebrow">Perspective</p>
+          <h2 class="mt-5 text-4xl font-semibold leading-tight text-foreground" data-i18n="perspective.title">I started from implementation, then moved closer to the decisions before code.</h2>
+        </div>
+        <div class="space-y-6 text-lg leading-8 text-muted-foreground lg:col-span-7 lg:col-start-6">
+          <p data-i18n="perspective.body.1">
+            Software Engineering taught me how backend systems, frontend interfaces, APIs, architecture, testing, and delivery actually work. It also taught me that many project risks appear before implementation begins.
+          </p>
+          <p data-i18n="perspective.body.2">
+            Over time, I became more interested in the decisions that happen before code is written: what should be built, why it should exist, where scope should end, how SIT and UAT should verify the work, and whether the final system solves the intended business problem.
+          </p>
+          <p data-i18n="perspective.body.3">
+            That is the perspective I bring to business owners: enough technical depth to see implementation risk, and enough business focus to keep the conversation centered on outcomes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-container py-16 sm:py-20">
+      <SectionHeading
+        eyebrow="Featured articles"
+        eyebrowKey="articles.eyebrow"
+        title="Writing about the space between business intent and software delivery."
+        titleKey="articles.title"
+      />
+      <div class="px-4 border-x-[1px] border-border/80">
+        {featuredArticles.map((article, index) => (
+          <ArticleListItem article={article.en} localizedArticle={article} />
+        ))}
+      </div>
+    </section>
+
+    <section class="site-container pb-16 sm:pb-24">
+      <SectionHeading
+        eyebrow="Featured projects"
+        eyebrowKey="projects.eyebrow"
+        title="Projects framed as product and business decisions, not just repositories."
+        titleKey="projects.title"
+      />
+      <div class="mt-10 grid gap-5">
+        {projects.map((project) => <ProjectCard project={project.en} localizedProject={project} />)}
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <style>
+    :global(html[lang="th"]) h1[data-i18n-html="hero.title"] {
+      font-size: clamp(2.225rem, 6vw, 4.85rem);
+      line-height: 1.28;
+    }
+  </style>
+  <script is:inline>
+    const pageTranslations = {
+      en: {
+        "hero.eyebrow": "Telio the Builder",
+        "hero.title": "I help business owners turn ideas into software requirements developers can actually build.",
+        "hero.body": "<strong>Tong has a background in Software Engineering and has worked directly with business teams across multiple projects</strong>, from understanding requirements and designing technical solutions and system architecture to building real software systems.<br /><br />This allows me to bridge Business and Technology, <strong>turning ideas into software that can actually be built and scaled.</strong>",
+        "hero.cta.articles": "Read my articles",
+        "help.eyebrow": "What I help with",
+        "help.title": "Less ambiguity before code, fewer surprises after delivery.",
+        "help.description": "Most software problems start as communication problems. The work is to make business intent specific enough for technical delivery.",
+        "help.ideas.title": "Turn Ideas Into Requirements",
+        "help.ideas.body": "Transform business ideas, pain points, and workflows into structured requirements a software team can discuss and estimate.",
+        "help.scope.title": "Define Scope Before Development",
+        "help.scope.body": "Clarify what should be built now, what can wait, and where the boundaries of the first version should be.",
+        "help.bridge.title": "Bridge Business and Developers",
+        "help.bridge.body": "Help business owners communicate with developers, freelancers, and software houses without needing to become technical themselves.",
+        "help.review.title": "Review What Gets Delivered",
+        "help.review.body": "Check whether the delivered software matches agreed requirements, business rules, and important workflows.",
+        "perspective.eyebrow": "Perspective",
+        "perspective.title": "I started from implementation, then moved closer to the decisions before code.",
+        "perspective.body.1": "Software Engineering taught me how backend systems, frontend interfaces, APIs, architecture, testing, and delivery actually work. It also taught me that many project risks appear before implementation begins.",
+        "perspective.body.2": "Over time, I became more interested in the decisions that happen before code is written: what should be built, why it should exist, where scope should end, how SIT and UAT should verify the work, and whether the final system solves the intended business problem.",
+        "perspective.body.3": "That is the perspective I bring to business owners: enough technical depth to see implementation risk, and enough business focus to keep the conversation centered on outcomes.",
+        "articles.eyebrow": "Featured articles",
+        "articles.title": "Writing about the space between business intent and software delivery.",
+        "projects.eyebrow": "Featured projects",
+        "projects.title": "Projects framed as product and business decisions, not just repositories.",
+      },
+      th: {
+        "hero.eyebrow": "Telio the Builder",
+        "hero.title": "เราช่วยเจ้าของธุรกิจเปลี่ยนไอเดียให้ชัดพอ<br />ที่นักพัฒนาจะนำไปสร้างเป็น Software ได้จริง",
+        "hero.body": "<strong>ตองมี Background ด้าน Software Engineering และทำงานร่วมกับฝั่ง Business โดยตรงในหลายโปรเจกต์</strong> ตั้งแต่การทำความเข้าใจ Requirement, ออกแบบ Solution และ Architecture ไปจนถึงการพัฒนาระบบจริง<br /><br />ทำให้ตองสามารถเชื่อม Business และ Technology เข้าด้วยกัน และเปลี่ยนไอเดียให้กลายเป็น Software ที่สร้างและต่อยอดได้จริง",
+        "hero.cta.articles": "อ่านบทความ",
+        "help.eyebrow": "สิ่งที่เราช่วยได้",
+        "help.title": "ลดความคลุมเครือก่อนเขียนโค้ด ลดความประหลาดใจหลังส่งมอบงาน",
+        "help.description": "ปัญหา Software จำนวนมากเริ่มจากปัญหาการสื่อสาร งานสำคัญคือทำให้เป้าหมายทางธุรกิจชัดเจนพอสำหรับการส่งมอบทางเทคนิค",
+        "help.ideas.title": "เปลี่ยนไอเดียเป็นข้อกำหนด",
+        "help.ideas.body": "แปลงไอเดีย ปัญหา และขั้นตอนการทำงานของธุรกิจให้เป็นข้อกำหนดที่ทีม Software สามารถคุยต่อและประเมินงานได้",
+        "help.scope.title": "กำหนดขอบเขตก่อนพัฒนา",
+        "help.scope.body": "ทำให้ชัดว่าอะไรควรถูกสร้างตอนนี้ อะไรควรรอก่อน และขอบเขตของเวอร์ชันแรกควรอยู่ตรงไหน",
+        "help.bridge.title": "เชื่อมธุรกิจกับนักพัฒนา",
+        "help.bridge.body": "ช่วยเจ้าของธุรกิจสื่อสารกับนักพัฒนา ฟรีแลนซ์ และบริษัท Software โดยไม่จำเป็นต้องกลายเป็นคนเทคนิคเอง",
+        "help.review.title": "ตรวจสิ่งที่ส่งมอบ",
+        "help.review.body": "ตรวจว่าสิ่งที่ส่งมอบตรงกับข้อกำหนด กฎทางธุรกิจ และขั้นตอนสำคัญที่ตกลงกันไว้หรือไม่",
+        "perspective.eyebrow": "มุมมอง",
+        "perspective.title": "เราเริ่มจากงานพัฒนา แล้วขยับเข้าใกล้การตัดสินใจก่อนเริ่มเขียนโค้ด",
+        "perspective.body.1": "วิศวกรรม Software ทำให้เราเข้าใจ backend, frontend, API, architecture, testing และการส่งมอบงานจริง รวมถึงเห็นว่าความเสี่ยงหลายอย่างเกิดขึ้นตั้งแต่ก่อนเริ่มพัฒนา",
+        "perspective.body.2": "เมื่อเวลาผ่านไป เราสนใจการตัดสินใจก่อนเขียนโค้ดมากขึ้น เช่น ควรสร้างอะไร ทำไปเพื่ออะไร ขอบเขตควรจบตรงไหน SIT และ UAT ควรตรวจอะไร และระบบสุดท้ายแก้ปัญหาทางธุรกิจได้จริงหรือไม่",
+        "perspective.body.3": "นี่คือมุมมองที่เรานำมาให้เจ้าของธุรกิจ: มีความเข้าใจทางเทคนิคพอที่จะมองเห็นความเสี่ยงในการพัฒนา และมีมุมมองทางธุรกิจพอที่จะคุยกันโดยยึดผลลัพธ์เป็นหลัก",
+        "articles.eyebrow": "บทความแนะนำ",
+        "articles.title": "เขียนเกี่ยวกับพื้นที่ระหว่างเป้าหมายทางธุรกิจกับการส่งมอบ Software",
+        "projects.eyebrow": "โปรเจกต์แนะนำ",
+        "projects.title": "โปรเจกต์ที่มองผ่านการตัดสินใจด้านผลิตภัณฑ์และธุรกิจ ไม่ใช่แค่ repository",
+      },
+    };
+
+    const getCurrentLanguage = () => {
+      const params = new URLSearchParams(window.location.search);
+      const urlLanguage = params.get("lang");
+      if (urlLanguage === "th" || urlLanguage === "en") return urlLanguage;
+
+      const storedLanguage = window.localStorage.getItem("language");
+      if (storedLanguage === "th" || storedLanguage === "en") return storedLanguage;
+
+      return "en";
+    };
+
+    const setPageLanguage = (language) => {
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.getAttribute("data-i18n");
+        if (key && pageTranslations[language][key]) {
+          element.textContent = pageTranslations[language][key];
+        }
+      });
+      document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-html");
+        if (key && pageTranslations[language][key]) {
+          element.innerHTML = pageTranslations[language][key];
+        }
+      });
+    };
+
+    setPageLanguage(getCurrentLanguage());
+    window.addEventListener("languagechange", (event) => setPageLanguage(event.detail.language));
+  </script>
+</BaseLayout>

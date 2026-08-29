@@ -1,0 +1,51 @@
+---
+import { contactMailto } from "@/config/site";
+
+const navItems = [
+  { href: "/", label: "Home", i18nKey: "nav.home" },
+  { href: "/articles", label: "Articles", i18nKey: "nav.articles" },
+  { href: "/projects", label: "Projects", i18nKey: "nav.projects" },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="sticky top-0 z-40 border-b border-border/80 bg-background/92 backdrop-blur">
+  <div class="site-container flex min-h-16 items-center justify-between gap-5">
+    <a href="/" class="text-base font-bold text-foreground" aria-label="Telio the Builder home">
+      Telio the Builder
+    </a>
+
+    <nav class="hidden items-center gap-1 text-sm text-muted-foreground sm:flex" aria-label="Main navigation">
+      {navItems.map((item) => {
+        const isActive = item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
+        return (
+          <a
+            href={item.href}
+            class:list={[
+              "rounded-md px-3 py-2 transition-colors hover:bg-[hsl(var(--accent-soft)/0.55)] hover:text-foreground",
+              isActive && "bg-[hsl(var(--accent-soft)/0.65)] text-foreground",
+            ]}
+          >
+            <span data-i18n={item.i18nKey}>{item.label}</span>
+          </a>
+        );
+      })}
+    </nav>
+
+    <a
+      href={contactMailto}
+      class="hidden rounded-md border border-border/90 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-card md:inline-flex"
+    >
+      <span data-i18n="common.contact">Contact</span>
+    </a>
+
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground sm:hidden" aria-label="Mobile navigation">
+      {navItems.map((item) => (
+        <a href={item.href} class="rounded-md px-2 py-2 hover:bg-[hsl(var(--accent-soft)/0.55)] hover:text-foreground">
+          <span data-i18n={item.i18nKey}>{item.label}</span>
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

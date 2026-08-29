@@ -1,0 +1,19 @@
+---
+interface Props {
+  label: string;
+  href?: string;
+}
+
+const { label, href } = Astro.props;
+const text = label.startsWith("#") ? label : `# ${label}`;
+const baseClassName = "inline-flex items-center rounded-sm border px-2.5 py-1 text-xs font-semibold";
+const categoryClassNames: Record<string, string> = {
+  "Business x Tech": "border-purple-400/40 bg-gradient-to-r from-purple-400/25 to-blue-400/25 text-purple-600",
+  Tech: "border-blue-400/40 bg-blue-400/20 text-blue-600",
+  Money: "border-orange-400/40 bg-orange-400/20 text-orange-600",
+  "Life (Coming of Age)": "border-teal-300/50 bg-teal-300/25 text-teal-600",
+};
+const className = `${baseClassName} ${categoryClassNames[label] ?? "border-primary/20 bg-[hsl(var(--accent-soft)/0.55)] text-primary"}`;
+---
+
+{href ? <a href={href} class={className}>{text}</a> : <span class={className}>{text}</span>}

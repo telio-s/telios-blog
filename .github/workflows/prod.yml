@@ -2,32 +2,30 @@ name: Deploy PROD
 
 on:
   workflow_dispatch:
-    branches:
-      - main
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: PROD
-    strategy:
-      matrix:
-        node-version: [20.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Use Nodejs ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 9.7.0
 
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
       - name: PNPM install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build app
         run: pnpm run build
@@ -37,7 +35,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
           vercel-args: "--prod" #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}} #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
+          vercel-org-id: ${{ secrets.ORG_ID }} #Required
+          vercel-project-id: ${{ secrets.PROJECT_ID }} #Required
           alias-domains: www.telio-s.com
           working-directory: ./

@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import ProjectLayout from "@/layouts/ProjectLayout.astro";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+
+export async function getStaticPaths() {
+  const projects = getLocalizedEntryPairs(await getCollection("projects")).filter(isPublicLocalizedEntry);
+  return projects.map((project) => ({
+    params: { slug: project.en.id },
+    props: { project: project.en, localizedProject: project },
+  }));
+}
+
+const { project, localizedProject } = Astro.props;
+---
+
+<ProjectLayout project={project} localizedProject={localizedProject} />
