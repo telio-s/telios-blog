@@ -34,9 +34,9 @@ export const translations = {
     home: {
       hero: {
         eyebrow: "Telio the Builder",
-        title: "I help business owners turn unclear ideas into software that developers can actually build.",
-        body:
-          "<strong>Tong has a background in Software Engineering and has worked directly with business teams across multiple projects</strong>, from understanding requirements and designing technical solutions and system architecture to building real software systems.<br /><br />This allows me to bridge Business and Technology, <strong>turning ideas into software that can actually be built and scaled.</strong>",
+        title:
+          "I help business owners turn unclear ideas into software that developers can actually build.",
+        body: "<strong>Tong has a background in Software Engineering and has worked directly with business teams across multiple projects</strong>, from understanding requirements and designing technical solutions and system architecture to building real software systems.<br /><br />This allows me to bridge Business and Technology, <strong>turning ideas into software that can actually be built and scaled.</strong>",
         ctaArticles: "Read my articles",
       },
       help: {
@@ -47,29 +47,26 @@ export const translations = {
         areas: [
           {
             title: "Turn Ideas Into Clear Requirements",
-            body:
-              "Transform business ideas, pain points, and workflows into structured requirements a software team can discuss and estimate.",
+            body: "Transform business ideas, pain points, and workflows into structured requirements a software team can discuss and estimate.",
           },
           {
             title: "Define Scope Before Development",
-            body:
-              "Clarify what should be built now, what can wait, and where the boundaries of the first version should be.",
+            body: "Clarify what should be built now, what can wait, and where the boundaries of the first version should be.",
           },
           {
             title: "Bridge Business and Developers",
-            body:
-              "Translate business needs into language developers, freelancers, and software houses can work with, without requiring the business owner to become technical.",
+            body: "Translate business needs into language developers, freelancers, and software houses can work with, without requiring the business owner to become technical.",
           },
           {
             title: "Review What Gets Delivered",
-            body:
-              "Check whether the delivered software matches agreed requirements, business rules, and important workflows.",
+            body: "Check whether the delivered software matches agreed requirements, business rules, and important workflows.",
           },
         ],
       },
       perspective: {
         eyebrow: "Perspective",
-        title: "I started from implementation, then moved closer to the decisions before code.",
+        title:
+          "I started from implementation, then moved closer to the decisions before code.",
         body: [
           "Working as a Software Engineer taught me how systems are designed, built, tested, and delivered. It also showed me that many project risks begin long before implementation.",
           "Today, I bring that technical perspective closer to the business side - helping clarify what should be built, why it matters, where scope should end, and whether the final product solves the intended problem.",
@@ -77,7 +74,8 @@ export const translations = {
       },
       articles: {
         eyebrow: "Featured articles",
-        title: "Notes on software, business, products, and whatever I'm building or learning.",
+        title:
+          "Notes on software, business, products, and whatever I'm building or learning.",
       },
       projects: {
         eyebrow: "Featured projects",
@@ -99,7 +97,8 @@ export const translations = {
     consulting: {
       hero: {
         eyebrow: "Private consulting proposal",
-        title: "Reduce ambiguity and risk when turning business needs into software.",
+        title:
+          "Reduce ambiguity and risk when turning business needs into software.",
       },
       risks: [
         "Hidden additional costs and budget overruns",
@@ -117,7 +116,8 @@ export const translations = {
       },
       packages: {
         eyebrow: "Service package",
-        title: "Choose the level of support that fits where your project is now.",
+        title:
+          "Choose the level of support that fits where your project is now.",
       },
     },
   },
@@ -141,7 +141,7 @@ export const translations = {
       languageToggle: "Change language to English",
     },
     footer: {
-      body: "เราช่วยเจ้าของธุรกิจตัดสินใจเรื่อง Software ให้ชัดขึ้น ทั้งก่อน ระหว่าง และหลังการพัฒนา",
+      body: "สร้าง เขียน และคิดอยู่ตรงกลางระหว่าง Business และ Technology",
     },
     common: {
       all: "ทั้งหมด",
@@ -156,59 +156,58 @@ export const translations = {
     home: {
       hero: {
         eyebrow: "Telio the Builder",
-        title: "เราช่วยเจ้าของธุรกิจเปลี่ยนไอเดียให้ชัดพอที่นักพัฒนาจะนำไปสร้างเป็น Software ได้จริง",
-        body:
-          "<strong>ตองมี Background ด้าน Software Engineering และทำงานร่วมกับฝั่ง Business โดยตรงในหลายโปรเจกต์</strong> ตั้งแต่การทำความเข้าใจ Requirement, ออกแบบ Solution และ Architecture ไปจนถึงการพัฒนาระบบจริง<br /><br />ทำให้ตองสามารถเชื่อม Business และ Technology เข้าด้วยกัน และเปลี่ยนไอเดียให้กลายเป็น Software ที่สร้างและต่อยอดได้จริง",
+        title:
+          "เราช่วยเจ้าของธุรกิจเปลี่ยนไอเดียให้ชัดพอที่นักพัฒนาจะนำไปสร้างเป็น Software ได้จริง",
+        body: "<strong>ตองมี Background ด้าน Software Engineering และทำงานร่วมกับฝั่ง Business โดยตรงในหลายโปรเจกต์</strong> ตั้งแต่การทำความเข้าใจ Requirement, ออกแบบ Solution และ Architecture ไปจนถึงการพัฒนาระบบจริง<br /><br />ทำให้ตองสามารถเชื่อม Business และ Technology เข้าด้วยกัน เปลี่ยนไอเดียให้กลายเป็น Software ที่สร้างได้จริงและพร้อมต่อยอด",
         ctaArticles: "อ่านบทความ",
       },
       help: {
         eyebrow: "สิ่งที่เราช่วยได้",
         title: "ลดความคลุมเครือก่อนเขียนโค้ด ลดความประหลาดใจหลังส่งมอบงาน",
         description:
-          "ปัญหา Software จำนวนมากเริ่มจากปัญหาการสื่อสาร งานสำคัญคือทำให้เป้าหมายทางธุรกิจชัดเจนพอสำหรับการส่งมอบทางเทคนิค",
+          "หลายปัญหาในโปรเจกต์ Software เริ่มขึ้นตั้งแต่ก่อนพัฒนาด้วยซ้ำ การทำให้เป้าหมายทางธุรกิจชัดเจนตั้งแต่ต้น ช่วยให้ทีมประเมิน พัฒนา และตรวจสอบสิ่งที่ส่งมอบได้ง่ายขึ้น",
         areas: [
           {
-            title: "เปลี่ยนไอเดียเป็นข้อกำหนด",
-            body:
-              "แปลงไอเดีย ปัญหา และขั้นตอนการทำงานของธุรกิจให้เป็นข้อกำหนดที่ทีม Software สามารถคุยต่อและประเมินงานได้",
+            title: "เปลี่ยนไอเดียให้เป็น Requirement ที่ชัดเจน",
+            body: "เปลี่ยนไอเดีย ปัญหา และขั้นตอนการทำงานของธุรกิจให้เป็น Requirement ที่ทีม Software สามารถนำไปพูดคุยและประเมินงานต่อได้",
           },
           {
-            title: "กำหนดขอบเขตก่อนพัฒนา",
-            body:
-              "ทำให้ชัดว่าอะไรควรถูกสร้างตอนนี้ อะไรควรรอก่อน และขอบเขตของเวอร์ชันแรกควรอยู่ตรงไหน",
+            title: "กำหนดขอบเขตก่อนเริ่มพัฒนา",
+            body: "ทำให้ชัดว่าอะไรควรสร้างตอนนี้ อะไรรอได้ และขอบเขตของเวอร์ชันแรกควรจบตรงไหน",
           },
           {
-            title: "เชื่อมธุรกิจกับนักพัฒนา",
-            body:
-              "ช่วยเจ้าของธุรกิจสื่อสารกับนักพัฒนา ฟรีแลนซ์ และบริษัท Software โดยไม่จำเป็นต้องกลายเป็นคนเทคนิคเอง",
+            title: "เชื่อม Business กับนักพัฒนา",
+            body: "แปลงความต้องการของธุรกิจให้อยู่ในรูปแบบที่นักพัฒนา ฟรีแลนซ์ และ Software House สามารถนำไปทำงานต่อได้ โดยเจ้าของธุรกิจไม่จำเป็นต้องมีความรู้ทางด้านการพัฒนา Software",
           },
           {
             title: "ตรวจสิ่งที่ส่งมอบ",
-            body: "ตรวจว่าสิ่งที่ส่งมอบตรงกับข้อกำหนด กฎทางธุรกิจ และขั้นตอนสำคัญที่ตกลงกันไว้หรือไม่",
+            body: "ตรวจว่าสิ่งที่พัฒนาขึ้นมาตรงกับ Requirement, Business Rule และ Flow สำคัญที่ตกลงกันไว้หรือไม่",
           },
         ],
       },
       perspective: {
         eyebrow: "มุมมอง",
-        title: "เราเริ่มจากงานพัฒนา แล้วขยับเข้าใกล้การตัดสินใจก่อนเริ่มเขียนโค้ด",
+        title:
+          "เริ่มจากการสร้าง Software แล้วขยับเข้าใกล้การตัดสินใจก่อนเขียนโค้ด",
         body: [
-          "วิศวกรรม Software ทำให้เราเข้าใจ backend, frontend, API, architecture, testing และการส่งมอบงานจริง รวมถึงเห็นว่าความเสี่ยงหลายอย่างเกิดขึ้นตั้งแต่ก่อนเริ่มพัฒนา",
-          "เมื่อเวลาผ่านไป เราสนใจการตัดสินใจก่อนเขียนโค้ดมากขึ้น เช่น ควรสร้างอะไร ทำไปเพื่ออะไร ขอบเขตควรจบตรงไหน SIT และ UAT ควรตรวจอะไร และระบบสุดท้ายแก้ปัญหาทางธุรกิจได้จริงหรือไม่",
-          "นี่คือมุมมองที่เรานำมาให้เจ้าของธุรกิจ: มีความเข้าใจทางเทคนิคพอที่จะมองเห็นความเสี่ยงในการพัฒนา และมีมุมมองทางธุรกิจพอที่จะคุยกันโดยยึดผลลัพธ์เป็นหลัก",
+          "การทำงานเป็น Software Engineer ทำให้ตองเห็นว่าระบบถูกออกแบบ พัฒนา ทดสอบ และส่งมอบอย่างไร และยังทำให้เห็นด้วยว่าความเสี่ยงหลายอย่างของโปรเจกต์เริ่มขึ้นตั้งแต่ก่อนลงมือพัฒนา",
+          "วันนี้ตองนำมุมมองทางเทคนิคนั้นมาใกล้ฝั่ง Business มากขึ้น ช่วยทำให้ชัดว่าควรสร้างอะไร ทำไปเพื่ออะไร ขอบเขตควรจบตรงไหน และสิ่งที่ส่งมอบสุดท้ายแก้ปัญหาที่ตั้งใจไว้จริงหรือไม่",
         ],
       },
       articles: {
         eyebrow: "บทความแนะนำ",
-        title: "เขียนเกี่ยวกับพื้นที่ระหว่างเป้าหมายทางธุรกิจกับการส่งมอบ Software",
+        title:
+          "บันทึกเรื่อง Software, Business, Product และสิ่งที่กำลังสร้างหรือเรียนรู้อยู่",
       },
       projects: {
         eyebrow: "โปรเจกต์แนะนำ",
-        title: "โปรเจกต์ที่มองผ่านการตัดสินใจด้านผลิตภัณฑ์และธุรกิจ ไม่ใช่แค่ repository",
+        title: "โปรเจกต์ที่สร้าง และเหตุผลเบื้องหลังการตัดสินใจต่าง ๆ",
       },
     },
     articlesIndex: {
       eyebrow: "บทความ",
-      title: "บันทึกเรื่องการตัดสินใจด้าน Software การส่งมอบงาน และการเติบโตผ่านการทำงาน",
+      title:
+        "บันทึกเรื่องการตัดสินใจด้าน Software การส่งมอบงาน และการเติบโตผ่านการทำงาน",
       description:
         "เขียนครอบคลุม business x tech, engineering, money และมุมมองส่วนตัวจากการสร้างงานและการทำงาน",
     },
@@ -221,7 +220,8 @@ export const translations = {
     consulting: {
       hero: {
         eyebrow: "ข้อเสนอที่ปรึกษาส่วนตัว",
-        title: "ลดความคลุมเครือและความเสี่ยงเมื่อต้องเปลี่ยนความต้องการทางธุรกิจให้เป็น Software",
+        title:
+          "ลดความคลุมเครือและความเสี่ยงเมื่อต้องเปลี่ยนความต้องการทางธุรกิจให้เป็น Software",
       },
       risks: [
         "งบประมาณบานปลายจากค่าใช้จ่ายที่ไม่ได้คาดไว้",
