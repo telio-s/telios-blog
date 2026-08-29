@@ -1,26 +1,38 @@
 ---
 import { contactMailto } from "@/config/site";
+import { getAlternateLanguage, getTranslations, localizePath, type Locale } from "@/i18n";
 
+interface Props {
+  lang: Locale;
+  alternatePath?: string;
+}
+
+const { lang, alternatePath } = Astro.props;
+const t = getTranslations(lang);
+const alternateLang = getAlternateLanguage(lang);
 const navItems = [
-  { href: "/", label: "Home", i18nKey: "nav.home" },
-  { href: "/articles", label: "Articles", i18nKey: "nav.articles" },
-  { href: "/projects", label: "Projects", i18nKey: "nav.projects" },
+  { href: localizePath(lang), label: t.nav.home },
+  { href: localizePath(lang, "/articles/"), label: t.nav.articles },
+  { href: localizePath(lang, "/projects/"), label: t.nav.projects },
 ];
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const languageHref = alternatePath ?? localizePath(alternateLang, Astro.url.pathname);
+const homePath = localizePath(lang).replace(/\/$/, "") || "/";
 ---
 
 <nav
   class="fixed inset-x-3 bottom-4 z-40 mx-auto flex max-w-2xl items-center justify-between gap-1 rounded-[20px] border border-border/80 bg-background/60 px-2 py-2 shadow-lg shadow-foreground/10 backdrop-blur-md sm:inset-x-4 sm:bottom-6 sm:gap-2 sm:px-4"
   aria-label="Main navigation"
 >
-  <a href="/" class="hidden shrink-0 px-2 text-sm font-bold text-foreground sm:inline-flex sm:text-base" aria-label="Telio the Builder home">
+  <a href={localizePath(lang)} class="hidden shrink-0 px-2 text-sm font-bold text-foreground sm:inline-flex sm:text-base" aria-label="Telio the Builder home">
     Telio the Builder
   </a>
 
   <div class="flex min-w-0 flex-1 items-center justify-center gap-1 text-sm text-muted-foreground sm:flex-none">
     {navItems.map((item) => {
-      const isActive = item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
+      const itemPath = item.href.replace(/\/$/, "") || "/";
+      const isActive = itemPath === homePath ? currentPath === homePath : currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
       return (
         <a
           href={item.href}
@@ -29,7 +41,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
             isActive && "bg-[hsl(var(--accent)/0.65)] text-foreground",
           ]}
         >
-          <span data-i18n={item.i18nKey}>{item.label}</span>
+          <span>{item.label}</span>
         </a>
       );
     })}
@@ -37,10 +49,9 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
   <div class="flex items-center gap-0">
     <a
-      href="/?lang=th"
+      href={languageHref}
       class="inline-flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-card/70 hover:text-foreground"
-      aria-label="Change language to Thai"
-      data-language-toggle
+      aria-label={t.nav.languageToggle}
     >
       <svg
         class="h-5 w-5"
@@ -80,92 +91,3 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
     </a>
   </div>
 </nav>
-
-<script>
-  const navTranslations = {
-    en: {
-      "nav.home": "Home",
-      "nav.articles": "Articles",
-      "nav.projects": "Projects",
-      "common.contact": "Contact",
-      "footer.body": "Building, writing, and thinking at the intersection of Business and Technology.",
-      "article.back": "Back to articles",
-      "project.back": "Back to projects",
-      "project.readCaseStudy": "Read case study",
-      "consulting.cta.discuss": "Discuss an engagement",
-      "consulting.label.recommendedFor": "Recommended for",
-      "consulting.label.startingPrice": "Starting price",
-      "consulting.label.deliverables": "Deliverables",
-      "consulting.label.engagement": "Engagement",
-    },
-    th: {
-      "nav.home": "หน้าแรก",
-      "nav.articles": "บทความ",
-      "nav.projects": "โปรเจกต์",
-      "common.contact": "ติดต่อ",
-      "footer.body": "เราช่วยเจ้าของธุรกิจตัดสินใจเรื่อง Software ให้ชัดขึ้น ทั้งก่อน ระหว่าง และหลังการพัฒนา",
-      "article.back": "กลับไปหน้าบทความ",
-      "project.back": "กลับไปหน้าโปรเจกต์",
-      "project.readCaseStudy": "อ่านเคสโปรเจกต์",
-      "consulting.cta.discuss": "คุยรายละเอียดงาน",
-      "consulting.label.recommendedFor": "เหมาะสำหรับ",
-      "consulting.label.startingPrice": "ราคาเริ่มต้น",
-      "consulting.label.deliverables": "สิ่งที่ส่งมอบ",
-      "consulting.label.engagement": "รูปแบบการทำงาน",
-    },
-  };
-
-  const languageToggle = document.querySelector("[data-language-toggle]");
-
-  const getInitialLanguage = () => {
-    const params = new URLSearchParams(window.location.search);
-    const urlLanguage = params.get("lang");
-    if (urlLanguage === "th" || urlLanguage === "en") return urlLanguage;
-
-    const storedLanguage = window.localStorage.getItem("language");
-    if (storedLanguage === "th" || storedLanguage === "en") return storedLanguage;
-
-    return "en";
-  };
-
-  const setNavLanguage = (language) => {
-    document.documentElement.lang = language;
-
-    document.querySelectorAll("[data-i18n]").forEach((element) => {
-      const key = element.getAttribute("data-i18n");
-      if (key && navTranslations[language][key]) {
-        element.textContent = navTranslations[language][key];
-      }
-    });
-
-    document.querySelectorAll("[data-locale]").forEach((element) => {
-      const locale = element.getAttribute("data-locale");
-      element.toggleAttribute("hidden", locale !== language);
-    });
-
-    const nextLanguage = language === "th" ? "en" : "th";
-    const nextParams = new URLSearchParams(window.location.search);
-    nextParams.set("lang", nextLanguage);
-
-    if (languageToggle) {
-      languageToggle.setAttribute("href", `${window.location.pathname}?${nextParams.toString()}`);
-      languageToggle.setAttribute("aria-label", language === "th" ? "Change language to English" : "Change language to Thai");
-      languageToggle.classList.toggle("text-primary", language === "th");
-      languageToggle.classList.toggle("text-muted-foreground", language !== "th");
-    }
-
-    window.localStorage.setItem("language", language);
-    window.dispatchEvent(new CustomEvent("languagechange", { detail: { language } }));
-  };
-
-  setNavLanguage(getInitialLanguage());
-
-  languageToggle?.addEventListener("click", (event) => {
-    event.preventDefault();
-    const nextLanguage = document.documentElement.lang === "th" ? "en" : "th";
-    const nextParams = new URLSearchParams(window.location.search);
-    nextParams.set("lang", nextLanguage);
-    window.history.replaceState({}, "", `${window.location.pathname}?${nextParams.toString()}`);
-    setNavLanguage(nextLanguage);
-  });
-</script>

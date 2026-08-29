@@ -1,0 +1,69 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BottomNav from "@/components/BottomNav.astro";
+import ConsultingPackage from "@/components/ConsultingPackage.astro";
+import ButtonLink from "@/components/ButtonLink.astro";
+import Footer from "@/components/Footer.astro";
+import { contactMailto } from "@/config/site";
+import { getCollection } from "astro:content";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+import { getTranslations, locales, localizePath, type Locale } from "@/i18n";
+import { getAbsoluteUrl, getHreflangLinks } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props as { lang: Locale };
+const t = getTranslations(lang);
+const packages = getLocalizedEntryPairs(await getCollection("consultingPackages"))
+  .filter(isPublicLocalizedEntry)
+  .sort((a, b) => a[lang].data.number.localeCompare(b[lang].data.number));
+const canonicalPath = localizePath(lang, "/consulting/");
+const canonical = getAbsoluteUrl(canonicalPath, Astro.site ?? Astro.url);
+const alternates = getHreflangLinks(canonicalPath, Astro.site ?? Astro.url);
+---
+
+<BaseLayout title="Consulting" description={t.meta.consultingDescription} lang={lang} canonical={canonical} alternates={alternates}>
+  <BottomNav lang={lang} />
+  <main>
+    <section class="hairline-y grid-frame">
+      <div class="site-container grid gap-10 py-16 sm:py-24 lg:grid-cols-12">
+        <div class="lg:col-span-12">
+          <p class="micro-label">{t.consulting.hero.eyebrow}</p>
+          <div class="mt-7 grid gap-6 lg:grid-cols-12 lg:items-start">
+            <h1 class="max-w-5xl text-5xl font-semibold leading-[1.04] text-foreground sm:text-7xl lg:col-span-7">
+              {t.consulting.hero.title}
+            </h1>
+            <div class="flex flex-wrap gap-3 lg:col-span-5 lg:pt-2">
+              {t.consulting.risks.map((label) => (
+                <span class="rounded-[16px] border border-border/80 bg-card/95 px-4 py-2 text-sm font-semibold text-foreground shadow-lg shadow-foreground/10 transition-all duration-200 ease-out hover:-translate-y-1 hover:scale-105 hover:border-primary/60 hover:bg-primary hover:text-primary-foreground hover:shadow-xl hover:shadow-primary/20">
+                  {label}
+                </span>
+              ))}
+              <div class="mt-8">
+                <ButtonLink href={contactMailto} class="shadow-lg shadow-primary/20">
+                  {t.consulting.ctaDiscuss}
+                </ButtonLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="site-container py-12">
+      <div class="border-b border-border/80 pb-8">
+        <p class="micro-label">{t.consulting.packages.eyebrow}</p>
+        <h2 class="mt-5 max-w-4xl text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+          {t.consulting.packages.title}
+        </h2>
+      </div>
+
+      <div class="mt-2">
+        {packages.map((item) => <ConsultingPackage {...item[lang].data} lang={lang} />)}
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</BaseLayout>

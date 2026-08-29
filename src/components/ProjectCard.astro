@@ -1,22 +1,19 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import type { LocalizedEntry } from "@/lib/localized-content";
+import { getTranslations, localizePath, type Locale } from "@/i18n";
 
 interface Props {
   project: CollectionEntry<"projects">;
-  localizedProject?: LocalizedEntry<"projects">;
+  lang: Locale;
 }
 
-const { project, localizedProject } = Astro.props;
-const projects = localizedProject ?? { en: project, th: project };
+const { project, lang } = Astro.props;
+const t = getTranslations(lang);
 ---
 
 <article class="notion-block group min-h-72 p-6 md:p-8">
   <div>
-    <p class="micro-label">
-      <span data-locale="en">{projects.en.data.status}</span>
-      <span data-locale="th" hidden>{projects.th.data.status}</span>
-    </p>
+    <p class="micro-label">{project.data.status}</p>
   </div>
   <div class="mt-4 flex flex-wrap gap-2">
       {project.data.tags.map((tag) => (
@@ -25,16 +22,12 @@ const projects = localizedProject ?? { en: project, th: project };
         </span>
       ))}
     </div>
-  <a href={`/projects/${project.id}`} class="mt-4 block max-w-4xl">
+  <a href={localizePath(lang, `/projects/${project.data.translationKey}/`)} class="mt-4 block max-w-4xl">
     <h3 class="text-4xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
-      <span data-locale="en">{projects.en.data.title}</span>
-      <span data-locale="th" hidden>{projects.th.data.title}</span>
+      {project.data.title}
     </h3>
-    <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">
-      <span data-locale="en">{projects.en.data.description}</span>
-      <span data-locale="th" hidden>{projects.th.data.description}</span>
-    </p>
-    <p class="mt-8 text-sm font-semibold text-primary" data-i18n="project.readCaseStudy">Read case study</p>
+    <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-foreground">{project.data.description}</p>
+    <p class="mt-8 text-sm font-semibold text-primary">{t.project.readCaseStudy}</p>
 
     
   </a>

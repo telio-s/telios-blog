@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+import { locales, type Locale } from "@/i18n";
+
+export async function getStaticPaths() {
+  const articles = getLocalizedEntryPairs(await getCollection("articles")).filter(isPublicLocalizedEntry);
+
+  return articles.flatMap((article) =>
+    locales.map((lang) => ({
+      params: { lang, slug: article[lang].data.translationKey },
+      props: { article: article[lang], localizedArticle: article, lang },
+    })),
+  );
+}
+
+const { article, localizedArticle, lang } = Astro.props as Astro.Props & { lang: Locale };
+---
+
+<ArticleLayout article={article} localizedArticle={localizedArticle} lang={lang} />

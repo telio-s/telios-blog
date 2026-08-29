@@ -6,64 +6,56 @@ import BottomNav from "@/components/BottomNav.astro";
 import Footer from "@/components/Footer.astro";
 import Badge from "@/components/Badge.astro";
 import type { LocalizedEntry } from "@/lib/localized-content";
+import { getAlternateLanguage, getTranslations, localizePath, type Locale } from "@/i18n";
+import { getAbsoluteUrl, getHreflangLinks } from "@/lib/seo";
 
 interface Props {
   article: CollectionEntry<"articles">;
-  localizedArticle?: LocalizedEntry<"articles">;
+  localizedArticle: LocalizedEntry<"articles">;
+  lang: Locale;
 }
 
-const { article, localizedArticle } = Astro.props;
-const articles = localizedArticle ?? { en: article, th: article };
-const { Content: EnglishContent } = await render(articles.en);
-const { Content: ThaiContent } = await render(articles.th);
-const date = articles.en.data.publishedAt.toLocaleDateString("en", {
+const { article, localizedArticle, lang } = Astro.props;
+const t = getTranslations(lang);
+const alternateLang = getAlternateLanguage(lang);
+const { Content } = await render(article);
+const date = article.data.publishedAt.toLocaleDateString(lang === "th" ? "th-TH" : "en", {
   month: "long",
   day: "numeric",
   year: "numeric",
 });
-const thaiDate = articles.th.data.publishedAt.toLocaleDateString("th-TH", {
-  month: "long",
-  day: "numeric",
-  year: "numeric",
-});
+const readingTime = article.data.readingTime ?? (lang === "th" ? "อ่าน 5 นาที" : "5 min read");
+const canonicalPath = localizePath(lang, `/articles/${article.data.translationKey}/`);
+const alternatePath = localizePath(alternateLang, `/articles/${localizedArticle[alternateLang].data.translationKey}/`);
+const canonical = getAbsoluteUrl(canonicalPath, Astro.site ?? Astro.url);
+const alternates = getHreflangLinks(canonicalPath, Astro.site ?? Astro.url);
 ---
 
-<BaseLayout title={articles.en.data.title} description={articles.en.data.description} type="article">
-  <BottomNav />
+<BaseLayout title={article.data.title} description={article.data.description} type="article" lang={lang} canonical={canonical} alternates={alternates}>
+  <BottomNav lang={lang} alternatePath={alternatePath} />
   <main>
     <article class="site-container py-12 sm:py-16">
-      <a href="/articles" class="text-sm font-semibold text-primary hover:underline" data-i18n="article.back">Back to articles</a>
+      <a href={localizePath(lang, "/articles/")} class="text-sm font-semibold text-primary hover:underline">{t.article.back}</a>
       <header class="mt-8 grid gap-8 border-y border-border/80 py-10 md:grid-cols-12">
         <div class="md:col-span-3">
           <Badge label={article.data.category} />
           <p class="mt-4 text-sm text-muted-foreground">
-            <time datetime={article.data.publishedAt.toISOString()} data-locale="en">{date}</time>
-            <time datetime={article.data.publishedAt.toISOString()} data-locale="th" hidden>{thaiDate}</time>
+            <time datetime={article.data.publishedAt.toISOString()}>{date}</time>
             <br />
-            <span data-locale="en">{articles.en.data.readingTime ?? "5 min read"}</span>
-            <span data-locale="th" hidden>{articles.th.data.readingTime ?? "อ่าน 5 นาที"}</span>
+            <span>{readingTime}</span>
           </p>
         </div>
         <div class="md:col-span-8">
-          <h1 class="text-4xl font-semibold leading-tight text-foreground sm:text-6xl">
-            <span data-locale="en">{articles.en.data.title}</span>
-            <span data-locale="th" hidden>{articles.th.data.title}</span>
-          </h1>
-          <p class="mt-6 max-w-3xl text-xl leading-8 text-muted-foreground">
-            <span data-locale="en">{articles.en.data.description}</span>
-            <span data-locale="th" hidden>{articles.th.data.description}</span>
-          </p>
+          <h1 class="text-4xl font-semibold leading-tight text-foreground sm:text-6xl">{article.data.title}</h1>
+          <p class="mt-6 max-w-3xl text-xl leading-8 text-muted-foreground">{article.data.description}</p>
         </div>
       </header>
-      <div class="mx-auto mt-12 max-w-3xl editorial-prose" data-locale="en">
-        <EnglishContent />
-      </div>
-      <div class="mx-auto mt-12 max-w-3xl editorial-prose" data-locale="th" hidden>
-        <ThaiContent />
+      <div class="mx-auto mt-12 max-w-3xl editorial-prose">
+        <Content />
       </div>
     </article>
   </main>
-  <Footer />
+  <Footer lang={lang} />
   <style>
     :global(html[lang="th"]) h1 {
       line-height: 1.22;

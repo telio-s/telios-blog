@@ -1,17 +1,31 @@
 ---
 import { getCollection } from "astro:content";
-import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+import { getAbsoluteUrl } from "@/lib/seo";
 
 export async function getStaticPaths() {
   const articles = getLocalizedEntryPairs(await getCollection("articles")).filter(isPublicLocalizedEntry);
+
   return articles.map((article) => ({
-    params: { slug: article.en.id },
-    props: { article: article.en, localizedArticle: article },
+    params: { slug: article.en.data.translationKey },
+    props: { redirectPath: `/en/articles/${article.en.data.translationKey}/` },
   }));
 }
 
-const { article, localizedArticle } = Astro.props;
+const { redirectPath } = Astro.props;
 ---
 
-<ArticleLayout article={article} localizedArticle={localizedArticle} />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content={`0; url=${redirectPath}`} />
+    <link rel="canonical" href={getAbsoluteUrl(redirectPath, Astro.site ?? Astro.url)} />
+    <title>Redirecting to article</title>
+  </head>
+  <body>
+    <p><a href={redirectPath}>Continue to article</a></p>
+  </body>
+</html>

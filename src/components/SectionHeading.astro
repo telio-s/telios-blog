@@ -1,18 +1,15 @@
 ---
 interface Props {
   eyebrow?: string;
-  eyebrowKey?: string;
   title: string;
-  titleKey?: string;
   description?: string;
-  descriptionKey?: string;
 }
 
-const { eyebrow, eyebrowKey, title, titleKey, description, descriptionKey } = Astro.props;
+const { eyebrow, title, description } = Astro.props;
 ---
 
 <div class="pb-8">
-  {eyebrow && <p class="micro-label" data-i18n={eyebrowKey}>{eyebrow}</p>}
-  <h2 class="mt-5 max-w-4xl pl-6 text-3xl font-semibold leading-tight text-foreground sm:text-4xl" data-i18n={titleKey}>{title}</h2>
-  {description && <p class="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground" data-i18n={descriptionKey}>{description}</p>}
+  {eyebrow && <p class="micro-label">{eyebrow}</p>}
+  <h2 class="mt-5 max-w-4xl pl-6 text-3xl font-semibold leading-tight text-foreground sm:text-4xl">{title}</h2>
+  {description && <p class="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground">{description}</p>}
 </div>

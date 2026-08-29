@@ -1,0 +1,100 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import BottomNav from "@/components/BottomNav.astro";
+import Footer from "@/components/Footer.astro";
+import ArticleListItem from "@/components/ArticleListItem.astro";
+import { getCollection } from "astro:content";
+import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+import { getTranslations, locales, localizePath, type Locale } from "@/i18n";
+import { getAbsoluteUrl, getHreflangLinks } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props as { lang: Locale };
+const t = getTranslations(lang);
+const articles = getLocalizedEntryPairs(await getCollection("articles"))
+  .filter(isPublicLocalizedEntry)
+  .sort((a, b) => b[lang].data.publishedAt.valueOf() - a[lang].data.publishedAt.valueOf());
+
+const categories = ["All", "Business x Tech", "Tech", "Money", "Life (Coming of Age)"];
+const categoryClassNames: Record<string, string> = {
+  "Business x Tech": "border-purple-400/40 bg-gradient-to-r from-purple-400/25 to-blue-400/25 text-purple-600 hover:border-purple-400/60 hover:text-purple-600 data-[active=true]:border-purple-400/60 data-[active=true]:text-purple-600",
+  Tech: "border-blue-400/40 bg-blue-400/20 text-blue-600 hover:border-blue-400/60 hover:text-blue-600 data-[active=true]:border-blue-400/60 data-[active=true]:text-blue-600",
+  Money: "border-orange-400/40 bg-orange-400/20 text-orange-600 hover:border-orange-400/60 hover:text-orange-600 data-[active=true]:border-orange-400/60 data-[active=true]:text-orange-600",
+  "Life (Coming of Age)": "border-teal-300/50 bg-teal-300/25 text-teal-600 hover:border-teal-300/70 hover:text-teal-600 data-[active=true]:border-teal-300/70 data-[active=true]:text-teal-600",
+};
+const canonicalPath = localizePath(lang, "/articles/");
+const canonical = getAbsoluteUrl(canonicalPath, Astro.site ?? Astro.url);
+const alternates = getHreflangLinks(canonicalPath, Astro.site ?? Astro.url);
+---
+
+<BaseLayout title={t.nav.articles} description={t.meta.articlesDescription} lang={lang} canonical={canonical} alternates={alternates}>
+  <BottomNav lang={lang} />
+  <main class="site-container py-12 sm:py-16">
+    <header class="grid gap-8 border-y border-border/80 py-10 md:grid-cols-12">
+      <div class="md:col-span-3">
+        <p class="micro-label">{t.articlesIndex.eyebrow}</p>
+      </div>
+      <div class="md:col-span-8">
+        <h1 class="text-5xl font-semibold leading-tight text-foreground sm:text-7xl">{t.articlesIndex.title}</h1>
+        <p class="mt-6 max-w-3xl text-xl leading-8 text-muted-foreground">{t.articlesIndex.description}</p>
+      </div>
+    </header>
+
+    <section class="mt-10" aria-label="Article filters">
+      <div class="flex flex-wrap gap-2" data-filter-list>
+        {categories.map((category) => (
+          <button
+            type="button"
+            class:list={[
+              "inline-flex items-center rounded-sm border px-3 py-1.5 text-sm font-semibold transition-colors",
+              category === "All"
+                ? "border-border/80 bg-card/45 text-muted-foreground hover:border-primary/40 hover:text-primary data-[active=true]:border-primary/40 data-[active=true]:bg-[hsl(var(--accent-soft)/0.7)] data-[active=true]:text-primary"
+                : categoryClassNames[category],
+            ]}
+            data-category={category}
+            data-active={category === "All" ? "true" : "false"}
+          >
+            <span>{category === "All" ? t.common.all : `# ${category}`}</span>
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-6" data-article-list>
+      {articles.map((article) => (
+        <div data-article-category={article[lang].data.category}>
+          <ArticleListItem article={article[lang]} lang={lang} />
+        </div>
+      ))}
+    </section>
+  </main>
+  <Footer lang={lang} />
+
+  <style>
+    :global(html[lang="th"]) h1 {
+      line-height: 1.22;
+    }
+  </style>
+
+  <script>
+    const buttons = document.querySelectorAll("[data-filter-list] button");
+    const articles = document.querySelectorAll("[data-article-category]");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const category = button.getAttribute("data-category");
+
+        buttons.forEach((item) => item.setAttribute("data-active", "false"));
+        button.setAttribute("data-active", "true");
+
+        articles.forEach((article) => {
+          const shouldShow = category === "All" || article.getAttribute("data-article-category") === category;
+          article.toggleAttribute("hidden", !shouldShow);
+        });
+      });
+    });
+  </script>
+</BaseLayout>

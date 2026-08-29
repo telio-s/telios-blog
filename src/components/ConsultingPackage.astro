@@ -1,7 +1,7 @@
 ---
 import ButtonLink from "@/components/ButtonLink.astro";
 import { createContactMailto } from "@/config/site";
-import type { LocalizedEntry } from "@/lib/localized-content";
+import { getTranslations, type Locale } from "@/i18n";
 
 interface Props {
   number: string;
@@ -12,7 +12,7 @@ interface Props {
   deliverables: string[];
   engagement: string;
   notes?: string;
-  localizedPackage?: LocalizedEntry<"consultingPackages">;
+  lang: Locale;
 }
 
 const {
@@ -24,10 +24,10 @@ const {
   deliverables,
   engagement,
   notes,
-  localizedPackage,
+  lang,
 } = Astro.props;
 
-const packageEntries = localizedPackage;
+const t = getTranslations(lang);
 const engagementMailto = createContactMailto(`Discuss ${name} Service`);
 ---
 
@@ -36,55 +36,36 @@ const engagementMailto = createContactMailto(`Discuss ${name} Service`);
     <p class="text-5xl font-semibold text-primary/35">{number}</p>
   </div>
   <div class="md:col-span-5">
-    <h2 class="text-3xl font-semibold leading-tight text-foreground">
-      <span data-locale="en">{packageEntries?.en.data.name ?? name}</span>
-      <span data-locale="th" hidden>{packageEntries?.th.data.name ?? name}</span>
-    </h2>
-    <p class="mt-4 text-lg leading-8 text-muted-foreground">
-      <span data-locale="en">{packageEntries?.en.data.description ?? description}</span>
-      <span data-locale="th" hidden>{packageEntries?.th.data.description ?? description}</span>
-    </p>
+    <h2 class="text-3xl font-semibold leading-tight text-foreground">{name}</h2>
+    <p class="mt-4 text-lg leading-8 text-muted-foreground">{description}</p>
   </div>
   <div class="grid gap-6 text-sm md:col-span-5">
     <div>
-      <p class="micro-label" data-i18n="consulting.label.recommendedFor">Recommended for</p>
-      <p class="mt-2 leading-7 text-foreground/85">
-        <span data-locale="en">{packageEntries?.en.data.recommendedFor ?? recommendedFor}</span>
-        <span data-locale="th" hidden>{packageEntries?.th.data.recommendedFor ?? recommendedFor}</span>
-      </p>
+      <p class="micro-label">{t.consulting.labels.recommendedFor}</p>
+      <p class="mt-2 leading-7 text-foreground/85">{recommendedFor}</p>
     </div>
     <div>
-      <p class="micro-label" data-i18n="consulting.label.startingPrice">Starting price</p>
-      <p class="mt-2 font-semibold text-foreground">
-        <span data-locale="en">{packageEntries?.en.data.startingPrice ?? startingPrice}</span>
-        <span data-locale="th" hidden>{packageEntries?.th.data.startingPrice ?? startingPrice}</span>
-      </p>
+      <p class="micro-label">{t.consulting.labels.startingPrice}</p>
+      <p class="mt-2 font-semibold text-foreground">{startingPrice}</p>
     </div>
     <div>
-      <p class="micro-label" data-i18n="consulting.label.deliverables">Deliverables</p>
-      <ul class="mt-3 space-y-2 text-muted-foreground" data-locale="en">
-        {(packageEntries?.en.data.deliverables ?? deliverables).map((item) => <li class="leading-6">- {item}</li>)}
-      </ul>
-      <ul class="mt-3 space-y-2 text-muted-foreground" data-locale="th" hidden>
-        {(packageEntries?.th.data.deliverables ?? deliverables).map((item) => <li class="leading-6">- {item}</li>)}
+      <p class="micro-label">{t.consulting.labels.deliverables}</p>
+      <ul class="mt-3 space-y-2 text-muted-foreground">
+        {deliverables.map((item) => <li class="leading-6">- {item}</li>)}
       </ul>
     </div>
     <div>
-      <p class="micro-label" data-i18n="consulting.label.engagement">Engagement</p>
-      <p class="mt-2 leading-7 text-muted-foreground">
-        <span data-locale="en">{packageEntries?.en.data.engagement ?? engagement}</span>
-        <span data-locale="th" hidden>{packageEntries?.th.data.engagement ?? engagement}</span>
-      </p>
+      <p class="micro-label">{t.consulting.labels.engagement}</p>
+      <p class="mt-2 leading-7 text-muted-foreground">{engagement}</p>
       <div class="mt-4">
         <ButtonLink href={engagementMailto} class="shadow-lg shadow-primary/20">
-          <span data-i18n="consulting.cta.discuss">Discuss an engagement</span>
+          {t.consulting.ctaDiscuss}
         </ButtonLink>
       </div>
     </div>
     {notes && (
       <div class="rounded-md border border-primary/20 bg-[hsl(var(--accent-soft)/0.45)] p-4 text-sm leading-6 text-foreground/80">
-        <span data-locale="en">{packageEntries?.en.data.notes ?? notes}</span>
-        <span data-locale="th" hidden>{packageEntries?.th.data.notes ?? notes}</span>
+        {notes}
       </div>
     )}
   </div>

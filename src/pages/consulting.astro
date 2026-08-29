@@ -1,151 +1,20 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import BottomNav from "@/components/BottomNav.astro";
-import ConsultingPackage from "@/components/ConsultingPackage.astro";
-import ButtonLink from "@/components/ButtonLink.astro";
-import Footer from "@/components/Footer.astro";
-import { contactMailto } from "@/config/site";
-import { getCollection } from "astro:content";
-import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+import { getAbsoluteUrl } from "@/lib/seo";
 
-const packages = getLocalizedEntryPairs(await getCollection("consultingPackages"))
-  .filter(isPublicLocalizedEntry)
-  .sort((a, b) => a.en.data.number.localeCompare(b.en.data.number));
-
-const riskBubbles = [
-  {
-    key: "consulting.risk.costs",
-    label: "Hidden additional costs and budget overruns",
-  },
-  {
-    key: "consulting.risk.needs",
-    label: "Software that doesn't match actual business needs",
-  },
-  {
-    key: "consulting.risk.vendor",
-    label: "Choosing the wrong developer or software vendor",
-  },
-  {
-    key: "consulting.risk.validation",
-    label: "Difficulty validating the quality and completeness of deliverables",
-  },
-  {
-    key: "consulting.risk.delays",
-    label: "Project delays and lack of progress visibility",
-  },
-];
+const redirectPath = "/en/consulting/";
 ---
 
-<BaseLayout title="Consulting" description="Private consulting service offering for business owners building software with developers, freelancers, or software houses.">
-  <BottomNav />
-  <main>
-    <section class="hairline-y grid-frame">
-      <div class="site-container grid gap-10 py-16 sm:py-24 lg:grid-cols-12">
-        <div class="lg:col-span-12">
-          <p class="micro-label" data-i18n="consulting.hero.eyebrow">Private consulting proposal</p>
-          <div class="mt-7 grid gap-6 lg:grid-cols-12 lg:items-start">
-            <h1 class="max-w-5xl text-5xl font-semibold leading-[1.04] text-foreground sm:text-7xl lg:col-span-7" data-i18n="consulting.hero.title">
-              Reduce ambiguity and risk when turning business needs into software.
-            </h1>
-            <div class="flex flex-wrap gap-3 lg:col-span-5 lg:pt-2">
-              {riskBubbles.map((item) => (
-                <span
-                  class="rounded-[16px] border border-border/80 bg-card/95 px-4 py-2 text-sm font-semibold text-foreground shadow-lg shadow-foreground/10 transition-all duration-200 ease-out hover:-translate-y-1 hover:scale-105 hover:border-primary/60 hover:bg-primary hover:text-primary-foreground hover:shadow-xl hover:shadow-primary/20"
-                  data-i18n={item.key}
-                >
-                  {item.label}
-                </span>
-              ))}
-              <div class="mt-8">
-                <ButtonLink href={contactMailto} class="shadow-lg shadow-primary/20">
-                  <span data-i18n="consulting.cta.discuss">Discuss an engagement</span>
-                </ButtonLink>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="self-end rounded-[16px] border border-border/80 bg-card/95 p-6 shadow-xl shadow-foreground/10 lg:col-span-4">
-          <p class="text-lg leading-8 text-muted-foreground">
-            Many business owners know what they want the business to achieve, but not how to convert that into something a software team can build reliably. I help represent the business perspective while understanding the technical side.
-          </p>
-          <div class="mt-8">
-            <ButtonLink href={contactMailto}>Discuss an engagement</ButtonLink>
-          </div>
-        </div> -->
-      </div>
-    </section>
-
-    <section class="site-container py-12">
-      <div class="border-b border-border/80 pb-8">
-        <p class="micro-label" data-i18n="consulting.packages.eyebrow">Service package</p>
-        <h2 class="mt-5 max-w-4xl text-3xl font-semibold leading-tight text-foreground sm:text-4xl" data-i18n="consulting.packages.title">
-          Choose the level of support that fits where your project is now.
-        </h2>
-      </div>
-
-      <div class="mt-2">
-        {packages.map((item) => <ConsultingPackage {...item.en.data} localizedPackage={item} />)}
-      </div>
-    </section>
-  </main>
-  <Footer />
-  <script is:inline>
-    const consultingTranslations = {
-      en: {
-        "consulting.hero.eyebrow": "Private consulting proposal",
-        "consulting.hero.title": "Reduce ambiguity and risk when turning business needs into software.",
-        "consulting.risk.costs": "Hidden additional costs and budget overruns",
-        "consulting.risk.needs": "Software that doesn't match actual business needs",
-        "consulting.risk.vendor": "Choosing the wrong developer or software vendor",
-        "consulting.risk.validation": "Difficulty validating the quality and completeness of deliverables",
-        "consulting.risk.delays": "Project delays and lack of progress visibility",
-        "consulting.cta.discuss": "Discuss an engagement",
-        "consulting.label.recommendedFor": "Recommended for",
-        "consulting.label.startingPrice": "Starting price",
-        "consulting.label.deliverables": "Deliverables",
-        "consulting.label.engagement": "Engagement",
-        "consulting.packages.eyebrow": "Service package",
-        "consulting.packages.title": "Choose the level of support that fits where your project is now.",
-      },
-      th: {
-        "consulting.hero.eyebrow": "ข้อเสนอที่ปรึกษาส่วนตัว",
-        "consulting.hero.title": "ลดความคลุมเครือและความเสี่ยงเมื่อต้องเปลี่ยนความต้องการทางธุรกิจให้เป็นSoftware",
-        "consulting.risk.costs": "งบประมาณบานปลายจากค่าใช้จ่ายที่ไม่ได้คาดไว้",
-        "consulting.risk.needs": "ระบบที่พัฒนาออกมาไม่ตรงกับความต้องการของธุรกิจ",
-        "consulting.risk.vendor": "เลือก Developer หรือ Software House ที่ไม่เหมาะกับงาน",
-        "consulting.risk.validation": "ตรวจสอบคุณภาพและความครบถ้วนของงานได้ยาก",
-        "consulting.risk.delays": "โปรเจกต์ล่าช้าและขาดความชัดเจนเรื่องความคืบหน้า",
-        "consulting.cta.discuss": "คุยรายละเอียดงาน",
-        "consulting.label.recommendedFor": "เหมาะสำหรับ",
-        "consulting.label.startingPrice": "ราคาเริ่มต้น",
-        "consulting.label.deliverables": "สิ่งที่ส่งมอบ",
-        "consulting.label.engagement": "รูปแบบการทำงาน",
-        "consulting.packages.eyebrow": "แพ็กเกจบริการ",
-        "consulting.packages.title": "เลือกระดับการสนับสนุนให้เหมาะกับสถานะของโปรเจกต์ตอนนี้",
-      },
-    };
-
-    const getCurrentLanguage = () => {
-      const params = new URLSearchParams(window.location.search);
-      const urlLanguage = params.get("lang");
-      if (urlLanguage === "th" || urlLanguage === "en") return urlLanguage;
-
-      const storedLanguage = window.localStorage.getItem("language");
-      if (storedLanguage === "th" || storedLanguage === "en") return storedLanguage;
-
-      return "en";
-    };
-
-    const setConsultingLanguage = (language) => {
-      document.querySelectorAll("[data-i18n]").forEach((element) => {
-        const key = element.getAttribute("data-i18n");
-        if (key && consultingTranslations[language][key]) {
-          element.textContent = consultingTranslations[language][key];
-        }
-      });
-    };
-
-    setConsultingLanguage(getCurrentLanguage());
-    window.addEventListener("languagechange", (event) => setConsultingLanguage(event.detail.language));
-  </script>
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content={`0; url=${redirectPath}`} />
+    <link rel="canonical" href={getAbsoluteUrl(redirectPath, Astro.site ?? Astro.url)} />
+    <title>Redirecting to consulting</title>
+  </head>
+  <body>
+    <p><a href={redirectPath}>Continue to consulting</a></p>
+  </body>
+</html>

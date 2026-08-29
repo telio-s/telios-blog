@@ -1,17 +1,31 @@
 ---
 import { getCollection } from "astro:content";
-import ProjectLayout from "@/layouts/ProjectLayout.astro";
 import { getLocalizedEntryPairs, isPublicLocalizedEntry } from "@/lib/localized-content";
+import { getAbsoluteUrl } from "@/lib/seo";
 
 export async function getStaticPaths() {
   const projects = getLocalizedEntryPairs(await getCollection("projects")).filter(isPublicLocalizedEntry);
+
   return projects.map((project) => ({
-    params: { slug: project.en.id },
-    props: { project: project.en, localizedProject: project },
+    params: { slug: project.en.data.translationKey },
+    props: { redirectPath: `/en/projects/${project.en.data.translationKey}/` },
   }));
 }
 
-const { project, localizedProject } = Astro.props;
+const { redirectPath } = Astro.props;
 ---
 
-<ProjectLayout project={project} localizedProject={localizedProject} />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content={`0; url=${redirectPath}`} />
+    <link rel="canonical" href={getAbsoluteUrl(redirectPath, Astro.site ?? Astro.url)} />
+    <title>Redirecting to project</title>
+  </head>
+  <body>
+    <p><a href={redirectPath}>Continue to project</a></p>
+  </body>
+</html>

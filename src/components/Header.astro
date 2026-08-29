@@ -1,24 +1,33 @@
 ---
 import { contactMailto } from "@/config/site";
+import { getTranslations, localizePath, type Locale } from "@/i18n";
 
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
 const navItems = [
-  { href: "/", label: "Home", i18nKey: "nav.home" },
-  { href: "/articles", label: "Articles", i18nKey: "nav.articles" },
-  { href: "/projects", label: "Projects", i18nKey: "nav.projects" },
+  { href: localizePath(lang), label: t.nav.home },
+  { href: localizePath(lang, "/articles/"), label: t.nav.articles },
+  { href: localizePath(lang, "/projects/"), label: t.nav.projects },
 ];
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const homePath = localizePath(lang).replace(/\/$/, "") || "/";
 ---
 
 <header class="sticky top-0 z-40 border-b border-border/80 bg-background/92 backdrop-blur">
   <div class="site-container flex min-h-16 items-center justify-between gap-5">
-    <a href="/" class="text-base font-bold text-foreground" aria-label="Telio the Builder home">
+    <a href={localizePath(lang)} class="text-base font-bold text-foreground" aria-label="Telio the Builder home">
       Telio the Builder
     </a>
 
     <nav class="hidden items-center gap-1 text-sm text-muted-foreground sm:flex" aria-label="Main navigation">
       {navItems.map((item) => {
-        const isActive = item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
+        const itemPath = item.href.replace(/\/$/, "") || "/";
+        const isActive = itemPath === homePath ? currentPath === homePath : currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
         return (
           <a
             href={item.href}
@@ -27,7 +36,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
               isActive && "bg-[hsl(var(--accent-soft)/0.65)] text-foreground",
             ]}
           >
-            <span data-i18n={item.i18nKey}>{item.label}</span>
+            <span>{item.label}</span>
           </a>
         );
       })}
@@ -37,13 +46,13 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
       href={contactMailto}
       class="hidden rounded-md border border-border/90 px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-card md:inline-flex"
     >
-      <span data-i18n="common.contact">Contact</span>
+      <span>{t.nav.contact}</span>
     </a>
 
     <nav class="flex items-center gap-1 text-sm text-muted-foreground sm:hidden" aria-label="Mobile navigation">
       {navItems.map((item) => (
         <a href={item.href} class="rounded-md px-2 py-2 hover:bg-[hsl(var(--accent-soft)/0.55)] hover:text-foreground">
-          <span data-i18n={item.i18nKey}>{item.label}</span>
+          <span>{item.label}</span>
         </a>
       ))}
     </nav>
